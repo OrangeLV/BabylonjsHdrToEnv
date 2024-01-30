@@ -11,7 +11,7 @@ import "@babylonjs/core/Materials/Textures/Loaders/ktxTextureLoader";
 // Custom types
 const enum TextureMode {
     brdf,
-    ibl
+    ibl,
 }
 
 // Find our elements
@@ -19,7 +19,9 @@ const mainCanvas = document.getElementById("renderCanvas") as HTMLCanvasElement;
 const headerTitle = document.getElementById("headerTitle") as HTMLCanvasElement;
 const iblTools = document.getElementById("iblTools") as HTMLCanvasElement;
 const iblInvite = document.getElementById("iblInvite") as HTMLCanvasElement;
-const iblInviteText = document.getElementById("iblInviteText") as HTMLCanvasElement;
+const iblInviteText = document.getElementById(
+    "iblInviteText"
+) as HTMLCanvasElement;
 const brdfTools = document.getElementById("brdfTools") as HTMLCanvasElement;
 
 const iblFooter = document.getElementById("iblFooter") as HTMLDivElement;
@@ -62,13 +64,14 @@ const setMode = (mode: TextureMode): void => {
             iblFooter.style.display = "block";
             brdfFooter.style.display = "none";
             iblInvite.style.display = "block";
-            iblInviteText.innerText = "Drag and drop an hdr file here to start processing.";
+            iblInviteText.innerText =
+                "Drag and drop an hdr file here to start processing.";
             break;
     }
-}
+};
 
 // Specular IBL generation
-const generateSpecularIBL = function(size = 512): void {
+const generateSpecularIBL = function (size = 512): void {
     if (cubeTexture) {
         iblInviteText.innerText = "Processing...";
         setTimeout(() => {
@@ -76,12 +79,12 @@ const generateSpecularIBL = function(size = 512): void {
             iblInvite.style.display = "none";
         }, 50);
     }
-}
+};
 
 // Blit IBL generation result
-const renderSpecularIBL = function(lod: number): void {
+const renderSpecularIBL = function (lod: number): void {
     textureCanvas.blitSpecularIBL(lod);
-}
+};
 
 // BRDF generation
 const renderBRDF = (): void => {
@@ -154,7 +157,7 @@ save256.onclick = (): void => {
 
 // File Drag and Drop
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const loadFiles = function(event: any): void {
+const loadFiles = function (event: any): void {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let _filesToLoad: any[] | undefined;
 
@@ -199,23 +202,37 @@ const loadFiles = function(event: any): void {
         for (let i = 0; i < files.length; i++) {
             const file = files[i];
             const name = files[i].name.toLowerCase();
-            const extension = name.split('.').pop();
-    
+            const extension = name.split(".").pop();
+
             if (extension === "dds" || extension === "ktx") {
                 FilesInputStore.FilesToLoad[name] = file;
-                cubeTexture = new CubeTexture("file:" + name, textureCanvas.engine, null, false, null, () => {
-                    generateSpecularIBL();
-                });
+                cubeTexture = new CubeTexture(
+                    "file:" + name,
+                    textureCanvas.engine,
+                    null,
+                    false,
+                    null,
+                    () => {
+                        generateSpecularIBL();
+                    }
+                );
                 return;
-            }
-            else if (extension === "hdr") {
+            } else if (extension === "hdr") {
                 FilesInputStore.FilesToLoad[name] = file;
-                cubeTexture = new HDRCubeTexture("file:" + name, textureCanvas.engine, 512, false, false, false, undefined, () => {
-                    generateSpecularIBL();
-                });
+                cubeTexture = new HDRCubeTexture(
+                    "file:" + name,
+                    textureCanvas.engine,
+                    512,
+                    false,
+                    false,
+                    false,
+                    undefined,
+                    () => {
+                        generateSpecularIBL();
+                    }
+                );
                 return;
-            }
-            else if (extension === "jpg" || extension === "png") {
+            } else if (extension === "jpg" || extension === "png") {
                 const indexPX = name.indexOf("_px");
                 if (indexPX > -1) {
                     for (let j = 0; j < files.length; j++) {
@@ -225,33 +242,47 @@ const loadFiles = function(event: any): void {
                     }
 
                     const prefix = name.substr(0, indexPX);
-                    cubeTexture = new CubeTexture("file:" + prefix, textureCanvas.engine, null, false, null, () => {
-                        generateSpecularIBL();
-                    });
+                    cubeTexture = new CubeTexture(
+                        "file:" + prefix,
+                        textureCanvas.engine,
+                        null,
+                        false,
+                        null,
+                        () => {
+                            generateSpecularIBL();
+                        }
+                    );
                     return;
                 }
             }
         }
 
-        iblInviteText.innerText = "No Texture to process. Try with an HDR file."
+        iblInviteText.innerText =
+            "No Texture to process. Try with an HDR file.";
     }
-}
+};
 
-const drag = function(e: DragEvent): void {
+const drag = function (e: DragEvent): void {
     e.stopPropagation();
     e.preventDefault();
-}
+};
 
-const drop = function(eventDrop: DragEvent): void {
+const drop = function (eventDrop: DragEvent): void {
     eventDrop.stopPropagation();
     eventDrop.preventDefault();
 
     loadFiles(eventDrop);
-}
+};
 
-const _dragEnterHandler = (e: DragEvent): void => { drag(e); };
-const _dragOverHandler = (e: DragEvent): void => { drag(e); };
-const _dropHandler = (e: DragEvent): void => { drop(e); };
+const _dragEnterHandler = (e: DragEvent): void => {
+    drag(e);
+};
+const _dragOverHandler = (e: DragEvent): void => {
+    drag(e);
+};
+const _dropHandler = (e: DragEvent): void => {
+    drop(e);
+};
 
 mainCanvas.addEventListener("dragenter", _dragEnterHandler, false);
 mainCanvas.addEventListener("dragover", _dragOverHandler, false);

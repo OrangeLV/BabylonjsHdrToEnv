@@ -1,4 +1,7 @@
-import { EffectWrapper, EffectRenderer } from "@babylonjs/core/Materials/effectRenderer";
+import {
+    EffectWrapper,
+    EffectRenderer,
+} from "@babylonjs/core/Materials/effectRenderer";
 import { ThinEngine } from "@babylonjs/core/Engines/thinEngine";
 import { InternalTexture } from "@babylonjs/core/Materials/Textures/internalTexture";
 import { BaseTexture } from "@babylonjs/core/Materials/Textures/baseTexture";
@@ -20,7 +23,11 @@ export class IBLDiffuseEffect {
     private readonly _engine: ThinEngine;
     private readonly _effectRenderer: EffectRenderer;
 
-    constructor(engine: ThinEngine, effectRenderer: EffectRenderer, size = 512) {
+    constructor(
+        engine: ThinEngine,
+        effectRenderer: EffectRenderer,
+        size = 512
+    ) {
         this._engine = engine;
         this._effectRenderer = effectRenderer;
 
@@ -35,7 +42,11 @@ export class IBLDiffuseEffect {
         const intTexture = texture.getInternalTexture();
         if (intTexture) {
             // Just in case generate fresh clean mips.
-            this._engine.updateTextureSamplingMode(Constants.TEXTURE_TRILINEAR_SAMPLINGMODE, intTexture, true);
+            this._engine.updateTextureSamplingMode(
+                Constants.TEXTURE_TRILINEAR_SAMPLINGMODE,
+                intTexture,
+                true
+            );
         }
 
         this._effectRenderer.applyEffectWrapper(effectWrapper);
@@ -43,7 +54,11 @@ export class IBLDiffuseEffect {
         const textureWidth = texture.getSize().width;
         const mipmapsCount = Math.round(Scalar.Log2(textureWidth)) + 1;
         effectWrapper.effect.setTexture("environmentMap", texture);
-        effectWrapper.effect.setFloat2("textureInfo", textureWidth, mipmapsCount - 1);
+        effectWrapper.effect.setFloat2(
+            "textureInfo",
+            textureWidth,
+            mipmapsCount - 1
+        );
 
         for (let face = 0; face < 6; face++) {
             this._engine.bindFramebuffer(this.texture, face);
@@ -56,7 +71,6 @@ export class IBLDiffuseEffect {
         }
 
         this._engine.unBindFramebuffer(this.texture);
-
 
         effectWrapper.dispose();
     }
@@ -87,12 +101,14 @@ export class IBLDiffuseEffect {
             generateMipMaps: false,
             generateDepthBuffer: false,
             generateStencilBuffer: false,
-            samplingMode: Constants.TEXTURE_NEAREST_SAMPLINGMODE
+            samplingMode: Constants.TEXTURE_NEAREST_SAMPLINGMODE,
         });
-        this._engine.updateTextureWrappingMode(texture,
+        this._engine.updateTextureWrappingMode(
+            texture,
             Constants.TEXTURE_CLAMP_ADDRESSMODE,
             Constants.TEXTURE_CLAMP_ADDRESSMODE,
-            Constants.TEXTURE_CLAMP_ADDRESSMODE);
+            Constants.TEXTURE_CLAMP_ADDRESSMODE
+        );
 
         return texture;
     }
