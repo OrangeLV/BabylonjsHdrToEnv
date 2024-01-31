@@ -8,6 +8,8 @@ import { BaseTexture } from "@babylonjs/core/Materials/Textures/baseTexture";
 import "@babylonjs/core/Materials/Textures/Loaders/ddsTextureLoader";
 import "@babylonjs/core/Materials/Textures/Loaders/ktxTextureLoader";
 
+import { SIZE } from "./consts";
+
 // Custom types
 const enum TextureMode {
     brdf,
@@ -71,7 +73,7 @@ const setMode = (mode: TextureMode): void => {
 };
 
 // Specular IBL generation
-const generateSpecularIBL = function (size = 512): void {
+const generateSpecularIBL = function (size = SIZE): void {
     if (cubeTexture) {
         iblInviteText.innerText = "Processing...";
         setTimeout(() => {
@@ -222,7 +224,7 @@ const loadFiles = function (event: any): void {
                 cubeTexture = new HDRCubeTexture(
                     "file:" + name,
                     textureCanvas.engine,
-                    512,
+                    SIZE,
                     false,
                     false,
                     false,

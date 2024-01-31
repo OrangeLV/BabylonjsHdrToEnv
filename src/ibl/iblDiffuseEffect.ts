@@ -17,6 +17,8 @@ import "@babylonjs/core/Shaders/ShadersInclude/pbrBRDFFunctions";
 
 import fragmentShader from "./iblDiffuseFragment.glsl";
 
+import { SIZE } from "../consts";
+
 export class IBLDiffuseEffect {
     public readonly texture: InternalTexture;
 
@@ -26,7 +28,7 @@ export class IBLDiffuseEffect {
     constructor(
         engine: ThinEngine,
         effectRenderer: EffectRenderer,
-        size = 512
+        size = SIZE
     ) {
         this._engine = engine;
         this._effectRenderer = effectRenderer;
